@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="Sematec">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sematec 2016 - Micro Blog</title>
+	<script type="text/javascript">
+
+			window.fbAsyncInit = function() {
+				    FB.init({	
+				      appId      : '1254830497921584',
+				      xfbml      : true,
+				      version    : 'v2.7'
+				    });
+
+			};
+
+		  (function(d, s, id){
+
+		     var js, fjs = d.getElementsByTagName(s)[0];
+		     if (d.getElementById(id)) {return;}
+		     js = d.createElement(s); js.id = id;
+		     js.src = "//connect.facebook.net/en_US/sdk.js";
+		     fjs.parentNode.insertBefore(js, fjs);
+		   }(document, 'script', 'facebook-jssdk'));
+
+	</script>
+
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.7/dist/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/jquery-toast.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	
+	<script src="http://192.168.111.55:4000/lib/socket.io.js"></script>
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery-toast.min.js"></script>
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/angular-route.js"></script>
+	<script type="text/javascript" src="controllers/Main.controller.js"></script>
+	<script type="text/javascript" src="services/Socket.service.js"></script>	
+	<script type="text/javascript" src="services/User.service.js"></script>
+	<script type="text/javascript" src="controllers/User.controller.js"></script>
+	
+</head>
+<body style="margin-top:70px;">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+	  <div class="container">
+	    <div class="navbar-header">
+	    <a class="navbar-brand" style="margin-left:185px;" href="#">Micro Blog com AngularJS e NodeJS</a>
+	    </div>
+
+		  <ul class="nav navbar-nav navbar-right" style="margin-right:188px;">
+	        <li><a href="#/">Pagina principal</a></li>
+	      </ul>
+	  </div>
+
+	</nav>
+	<div class="container">
+		<div class="row">
+			<div class="col col-sm-2"></div>
+
+			<div class="col col-sm-5">
+				<ng-view></ng-view>
+			</div>
+
+
+			<div class="col col-sm-3">
+			    <div class="panel panel-default" ng-controller="MainCtrl">
+			      <div class="panel-heading">
+					<div class="input-group">
+					    <input type="text" class="form-control" ng-model="search" placeholder="Buscar usuário online" style="outline:none" />
+					    <span class="input-group-addon">
+					        <i class="glyphicon glyphicon-search"></i>
+					    </span>
+					</div>
+			      </div>
+			      <div class="panel-body" ng-repeat="user in connectedUsers | filter:search">
+			      	<div class="col col-xs-4" >
+			      		<img class="img-rounded" src="http://graph.facebook.com/{{user.id}}/picture?type=small">
+			      	</div>
+			      	<div class="col col-xs-8">
+			      		<strong>{{user.name}}</strong>
+			      		<br>
+			      		<span style="color:green">Online</span>
+			      	</div>
+
+			    </div>
+			</div>
+
+			<div class="col col-sm-2"></div>
+		</div>
+	</div>
+</body>
+</html>

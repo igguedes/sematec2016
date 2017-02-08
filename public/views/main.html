@@ -1,0 +1,38 @@
+<div class="panel panel-default">
+  <div class="panel-body">
+  <div class="col col-xs-3">
+  	<img class="img-rounded" src="http://graph.facebook.com/{{id}}/picture?type=normal">
+  </div>
+  <div class="col col-xs-1"></div>
+  <div class="col col-xs-8">
+  	<h4 style="margin:0; padding:0">Bem vindo {{name}}</h4>
+  	<p>
+  		<small>Agora você pode compartilhar mensagens!</small>
+  	</p>
+  	<a href="#/publication" class="btn btn-sm btn-primary">Escrever publicação</a>
+  	<button class="btn btn-sm btn-danger" ng-click="logout()">Sair</button>
+  </div>
+  </div>
+</div>
+
+
+
+<!-- Publicações -->
+<div>
+	<div class="panel panel-default" ng-repeat="post in posts">
+		<div class="panel-body">
+			<div class="col col-xs-2">
+				<img class="img-rounded" src="http://graph.facebook.com/{{post.idEmissor}}/picture?type=small">
+			</div>
+			<div class="col col-xs-9">
+				<strong>{{post.emissor}}</strong> <small style="margin-left:20px;">{{ post.data | date: 'dd/MM/yyyy'}}</small>
+
+				<p style="margin-top:10px">{{post.mensagem}}</p>
+			</div>
+			<div class="col col-xs-1">
+				<a ng-if="post.idEmissor == id" ng-click="deletePost(post.idPost)" style="cursor:pointer; text-decoration:none;" class="glyphicon glyphicon-trash"></a>
+			</div>
+
+		</div>
+	</div>
+</div>

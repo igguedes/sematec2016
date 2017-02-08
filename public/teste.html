@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="Demo2">
+<head>
+	<title>Demo 2 - Lista de Tarefas</title>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<script type="text/javascript">
+		var app = angular.module("Demo2", []);
+		app.controller("Demo2Ctrl", function($scope){
+			$scope.tarefas = [
+				{titulo: "Tarefa 1", finalizada: false},
+				{titulo: "Tarefa 2", finalizada: false}
+			];
+
+			$scope.restantes = function(){
+				var count = 0;
+				for(var i = 0; i<$scope.tarefas.length; i++){
+					if($scope.tarefas[i].finalizada == false){
+						count++;
+					}
+				}
+				return count;
+			}
+
+			$scope.finalizadas = function(){
+				return $scope.tarefas.length - $scope.restantes();
+			}
+
+			$scope.addTarefa = function(titulo){
+				$scope.tarefas.push({titulo: titulo, feito: false});
+			}
+		});
+	</script>
+
+	<style type="text/css">
+		.feito-false{
+			text-decoration: none;
+		}
+
+		.feito-true{
+			text-decoration: line-through;
+			color:red;
+		}
+	</style>
+
+</head>
+<body ng-controller="Demo2Ctrl">
+	<input type="text" ng-model="titulo" name="">
+	<button ng-click="addTarefa(titulo)">adicionar tarefa</button>
+	<div ng-repeat="tarefa in tarefas">
+		<input type="checkbox" ng-model="tarefa.finalizada"> <span class="feito-{{tarefa.finalizada}}">{{tarefa.titulo}}</span>
+	</div>
+	Restantes {{restantes()}}
+	Concluidas {{finalizadas()}}
+</body>
+</html>

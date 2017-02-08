@@ -1,0 +1,122 @@
+var express = require('express');
+var app = express();
+var path = require('path');
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var sleep = require('system-sleep');
+var body = require('body-parser');
+
+
+app.use(body.json());
+
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+var activeUsers = [];
+var posts = [];
+
+
+
+function findUserConnected(id){
+	return activeUsers.some(function(el){
+		return el.id === id;
+	});
+}
+
+io.on('connection', function(socket){
+
+  socket.on('user connected', function(data){
+  	userInfo = {
+		socketId : socket.id,
+		id: data.id,
+		name: data.name
+  	}
+
+  	if(!findUserConnected(data.id)){
+  		activeUsers.push(userInfo);
+  		io.emit('user connected', userInfo.name);
+  	}
+
+  });
+
+  socket.on('disconnect', function(){
+  	removeFromSocket(socket.id);
+  	//sleep(1000);
+  	io.emit('user disconnected');
+  });
+
+  socket.on('new post', function(){
+  	io.emit('new post');
+  });
+
+});
+
+function removeFromSocket(socketId){
+	for(i=0; i<activeUsers.length; i++){
+		if(activeUsers[i].socketId == socketId){
+			activeUsers.splice(i, 1);
+		}
+	}
+}
+
+
+app.get('/posts', function(req,res){
+	res.json(posts);
+});
+
+
+app.post('/delete/:id', function(req,res){
+	var idPost = req.params.id;
+
+	for(i=0;i<posts.length;i++){
+		if(posts[i].idPost == idPost){
+			posts.splice(i, 1);
+			res.json({
+				status: "success"
+			});
+			break;
+		}
+	}
+});
+
+app.post('/post', function(req,res){
+
+	var msg = req.body;
+	msg.idPost = msg.idEmissor + (new Date(msg.data).getMilliseconds());
+
+	sleep(1000);
+
+	if(posts.unshift(msg)){
+		res.json({
+			status: 'success'
+		})
+	}else{
+		res.json({
+			status: 'fail'
+		})
+	}
+	
+
+
+});
+
+app.get('/active-users', function(req,res){
+	res.json(activeUsers);
+});
+
+
+app.get('/lib/socket.io.js', function(req, res) {
+  res.sendFile(__dirname + '/node_modules/socket.io/node_modules/socket.io-client/socket.io.js');
+});
+
+
+http.listen(3000, function(){
+	console.log("Servidor iniciado");
+});

@@ -1,0 +1,17 @@
+{
+  "name": "sematec",
+  "version": "1.0.0",
+  "description": "Curso de Angular JS para a Sematec 2016 IFCE - Campus Crato",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "[\"igor\", \"flaviano\"]",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cors": "^2.8.1",
+    "express": "^4.14.0",
+    "socket.io": "^1.4.8"
+  }
+}
